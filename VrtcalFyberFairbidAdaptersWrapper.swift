@@ -1,10 +1,12 @@
 import Vrtcal_Adapters_Wrapper_Parent
 import FairBidSDK
 
-class VrtcalFyberFairbidAdaptersWrapper: AdapterWrapperProtocol {
+// Must be NSObject for FairBidDelegate
+class VrtcalFyberFairbidAdaptersWrapper: NSObject, AdapterWrapperProtocol {
 
     var appLogger: Logger
     var sdkEventsLogger: Logger
+    var sdk = SDK.fyberFairbid
     var delegate: AdapterWrapperDelegate
     
     required init(
@@ -19,6 +21,7 @@ class VrtcalFyberFairbidAdaptersWrapper: AdapterWrapperProtocol {
     
     func initializeSdk() {
         appLogger.log()
+        FairBid.delegate = self
         FairBid.start(withAppId: "109613")
     }
     
@@ -42,5 +45,27 @@ class VrtcalFyberFairbidAdaptersWrapper: AdapterWrapperProtocol {
     
     func showInterstitial() -> Bool {
         return false
+    }
+    
+    func destroyInterstitial() {
+        
+    }
+}
+
+extension VrtcalFyberFairbidAdaptersWrapper: FairBidDelegate {
+    func networkStarted(_ network: FYBMediatedNetwork) {
+        sdkEventsLogger.log("networkStarted: \(network)")
+    }
+    
+    func network(_ network: FYBMediatedNetwork, failedToStartWithError error: Error) {
+        sdkEventsLogger.log("network: \(network) failedToStartWithError: \(error)")
+    }
+    
+    func mediationStarted() {
+        sdkEventsLogger.log("mediationStarted")
+    }
+    
+    func mediationFailedToStartWithError(_ error: Error) {
+        sdkEventsLogger.log("mediationFailedToStartWithError: \(error)")
     }
 }
