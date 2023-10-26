@@ -25,9 +25,9 @@ class VrtcalFyberFairbidAdaptersWrapper: NSObject, AdapterWrapperProtocol {
         FairBid.start(withAppId: "109613")
     }
     
-    func handle(vrtcalAsSecondaryConfig: VrtcalAsSecondaryConfig) {
+    func handle(adTechConfig: AdTechConfig) {
         
-        switch vrtcalAsSecondaryConfig.placementType {
+        switch adTechConfig.placementType {
                 
             case .banner:
                 appLogger.log()
